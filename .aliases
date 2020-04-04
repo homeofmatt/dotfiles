@@ -1,0 +1,13 @@
+# Navigation aliases
+alias ll="ls -lha"
+
+# Git aliases
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit"
+alias gp="git push"
+alias gpu="git pull"
+alias gdi="git diff"
+alias gco="git checkout"
+alias gpub="git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
+alias gogita='open "http://github.com/q-centrix/${PWD##*/}/tree/$(git branch 2>/dev/null | grep "^*"| tr -d "* ")"'
