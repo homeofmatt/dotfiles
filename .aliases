@@ -11,3 +11,12 @@ alias gdi="git diff"
 alias gco="git checkout"
 alias gpub="git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
 alias gogita='open "http://github.com/q-centrix/${PWD##*/}/tree/$(git branch 2>/dev/null | grep "^*"| tr -d "* ")"'
+
+# Rails aliases
+alias db:c='rake db:create'
+alias db:ct='rake db:create RAILS_ENV=test'
+alias db:d='rake db:drop'
+alias db:s='rake db:seed'
+alias db:st='rake db:seed RAILS_ENV=test'
+alias db:m='rake db:migrate'
+alias db:mt='rake db:migrate RAILS_ENV=test'
