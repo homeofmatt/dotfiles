@@ -1,6 +1,10 @@
 # Navigation aliases
 alias ll="ls -lha"
 
+# Console command aliases
+alias dulist="sudo du -hs * | sort -h"
+alias shreddit="gshred -v -u ~/Code/gshred/**/*"
+
 # Git aliases
 alias gs="git status"
 alias ga="git add"
