@@ -9,14 +9,60 @@ alias gp="git push"
 alias gpu="git pull"
 alias gdi="git diff"
 alias gco="git checkout"
-alias gpub="git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)"
+alias gpn="git push --set-upstream origin $(git branch --show-current)"
 alias gogita='open "http://github.com/q-centrix/${PWD##*/}/tree/$(git branch 2>/dev/null | grep "^*"| tr -d "* ")"'
 
 # Rails aliases
-alias db:c='rake db:create'
-alias db:ct='rake db:create RAILS_ENV=test'
-alias db:d='rake db:drop'
-alias db:s='rake db:seed'
-alias db:st='rake db:seed RAILS_ENV=test'
-alias db:m='rake db:migrate'
-alias db:mt='rake db:migrate RAILS_ENV=test'
+alias dbc='rake db:create'
+alias dbct='rake db:create RAILS_ENV=test'
+alias dbd='rake db:drop'
+alias dbs='rake db:seed'
+alias dbst='rake db:seed RAILS_ENV=test'
+alias dbm='rake db:migrate'
+alias dbmt='rake db:migrate RAILS_ENV=test'
+
+# Common command aliases
+alias rc="rails c"
+alias brc="bundle; rails c"
+alias brs="bundle; rails s"
+
+# Test command aliases
+alias yspec="yarn test --coverage=false -u"
+alias ber="bundle exec rspec"
+
+# Custom shell functions
+
+# Delete branches that are no longer present on remote
+prune() {
+  git fetch -p
+        for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}')
+  do
+    command git branch -D "$branch"
+  done
+}
+
+# Dumps current db and saves with passed name or current datetime
+function db_dump() {
+  if [ -n "$1" ]
+  then
+    local db_filename="$1"
+  else
+    local db_filename=`date +"%Y-%m-%d_%H:%M:%S"`
+  fi
+  pg_dump -Fc currica_development > /Users/mattcongel/Code/q-centrix/dumps/${db_filename}.dump
+  echo DB Dump created - /Users/mattcongel/Code/q-centrix/dumps/${db_filename}.dump
+}
+
+# Restore db from dump
+# db_restore 2019-11-20_14:06:31
+function db_restore() {
+  if [ -f /Users/mattcongel/Code/q-centrix/dumps/"$1".dump ]
+  then
+    bundle install;
+    rake db:drop db:create;
+    pg_restore -d currica_development --verbose --clean --no-acl --no-owner /Users/mattcongel/Code/q-centrix/dumps/"$1".dump;
+    rake db:migrate;
+  else
+    echo Please input valid dump filename
+  fi
+}
